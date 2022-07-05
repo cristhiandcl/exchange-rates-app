@@ -1,3 +1,5 @@
+import "react-loader-spinner/dist/loader/css/react-spinner-loader.css";
+import { BallTriangle } from "react-loader-spinner";
 import { Autocomplete, TextField } from "@mui/material";
 import { useEffect, useState } from "react";
 import Calendar from "./DatePicker";
@@ -57,6 +59,7 @@ function InputsExchange({ currencies }) {
     }
 
     // render only when there is data on value1 (avoid error in first render due to null variable)
+    setIsRate(false);
     value1 !== null && getData();
     //
   }, [value1]);
@@ -95,20 +98,30 @@ function InputsExchange({ currencies }) {
         />
       </div>
 
+      {/* loading status*/}
+      {isRate === false && value1 !== null && value2 !== null && (
+        <div className="flex justify-center mt-4">
+          <BallTriangle
+            height="100"
+            width="100"
+            color="grey"
+            ariaLabel="loading"
+          />
+        </div>
+      )}
+      {/**/}
+
       {/* Display exchange rate  when isRate and value1 and value 2 !== null*/}
       {isRate && value1 !== null && value2 !== null && (
         <div>
           <p className="text-2xl font-bold text-center mt-4 text-green-600">
             1 {value1.name} = {rates[value2.id]} {value2.name}{" "}
           </p>
-          <p className="text-xl text-center mt-8 font-bold w-2/4 mx-auto">
-            Here you can find some historical exchange rates for the selected
-            currencies, just pick a date
-          </p>
           <Calendar
             requestOptions={requestOptions}
             value1={value1}
             value2={value2}
+            isRate={isRate}
           />
         </div>
       )}
